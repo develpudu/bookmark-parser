@@ -9,6 +9,10 @@ A command-line tool to parse Google Chrome bookmarks and store them in a SQLite 
 - Search bookmarks by title or URL
 - Check for dead links and redirects
 - Organize bookmarks by folders
+- Generate validation reports for bookmark status
+- Export bookmarks in different categories (valid, dead links, redirects)
+- Track duplicate bookmarks
+- Maintain folder structure during import/export
 
 ## Installation
 
@@ -38,6 +42,31 @@ Search through your parsed bookmarks:
 ```
 
 The search will look for matches in both the title and URL of bookmarks.
+
+### Validating Bookmarks
+
+Check for dead links and redirects in your bookmarks:
+
+```bash
+./bookmark-parser validate
+```
+
+This will generate a validation report in the `output/validation_report.txt` file with statistics about valid URLs, dead links, and redirects.
+
+### Exporting Bookmarks
+
+Export your bookmarks based on their status:
+
+```bash
+./bookmark-parser export
+```
+
+This will create three files in the `output` directory:
+- `bookmarks.html`: Valid bookmarks that are working correctly
+- `dead-links.html`: Bookmarks that are no longer accessible
+- `redirects.html`: Bookmarks that redirect to different URLs
+
+All exported files maintain the original folder structure and can be imported back into Chrome.
 
 ## Development
 

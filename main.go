@@ -42,7 +42,8 @@ func main() {
 	validateCmd := flag.NewFlagSet("validate", flag.ExitOnError)
 
 	exportCmd := flag.NewFlagSet("export", flag.ExitOnError)
-	outputFile := exportCmd.String("output", "", "Path to save the exported bookmarks HTML file")
+	exportType := exportCmd.String("type", "all", "Type of bookmarks to export: valid, dead, redirects, or all")
+	outputFile := exportCmd.String("output", "output/bookmarks.html", "Path to save the exported bookmarks HTML file")
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'parse', 'search', 'validate', or 'export' subcommands")
@@ -89,10 +90,25 @@ func main() {
 		if *outputFile == "" {
 			log.Fatal("Please provide an output file path using -output flag")
 		}
-		if err := parser.ExportValidBookmarks(db, *outputFile); err != nil {
+		
+		var err error
+		switch *exportType {
+		case "valid":
+			err = parser.ExportValidBookmarks(db, *outputFile)
+		case "dead":
+			err = parser.ExportDeadBookmarks(db, *outputFile)
+		case "redirects":
+			err = parser.ExportRedirectBookmarks(db, *outputFile)
+		case "all":
+			err = parser.ExportAllBookmarks(db, "output")
+		default:
+			log.Fatal("Invalid export type. Must be one of: valid, dead, redirects, or all")
+		}
+		
+		if err != nil {
 			log.Fatalf("Error exporting bookmarks: %v", err)
 		}
-		fmt.Printf("Successfully exported valid bookmarks to %s\n", *outputFile)
+		fmt.Println("Export completed successfully")
 
 	default:
 		fmt.Println("expected 'parse', 'search', 'validate', or 'export' subcommands")

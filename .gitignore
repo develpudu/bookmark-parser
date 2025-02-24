@@ -1,5 +1,7 @@
 .trae/
+bookmark-parser
 tmp/
+output/*
 .DS_Store
 *.db
 *.exe
